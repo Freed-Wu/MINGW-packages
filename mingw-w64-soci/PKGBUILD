@@ -14,10 +14,11 @@ msys2_references=(
   'aur: soci'
 )
 license=('spdx:BSL-1.0')
-depends=("${MINGW_PACKAGE_PREFIX}-boost")
+depends=("${MINGW_PACKAGE_PREFIX}-gcc-libs")
 makedepends=("${MINGW_PACKAGE_PREFIX}-cc"
              "${MINGW_PACKAGE_PREFIX}-cmake"
              "${MINGW_PACKAGE_PREFIX}-ninja"
+             "${MINGW_PACKAGE_PREFIX}-boost"
              $([[ ${CARCH} == aarch64 ]] || echo "${MINGW_PACKAGE_PREFIX}-firebird")
              "${MINGW_PACKAGE_PREFIX}-libmariadbclient"
              "${MINGW_PACKAGE_PREFIX}-postgresql"
@@ -39,9 +40,9 @@ sha256sums=('4b1ff9c8545c5d802fbe06ee6cd2886630e5c03bf740e269bb625b45cf934928'
 
 prepare() {
   cd "${srcdir}/${_realname}-${pkgver}"
-  patch -p1 -i ${srcdir}/soci-4.0.0.patch
-  patch -p1 -i ${srcdir}/soci-cmake-sociconfig.patch
-  patch -p1 -i ${srcdir}/soci-tests-catch.patch
+  patch -p1 -i "${srcdir}"/soci-4.0.0.patch
+  patch -p1 -i "${srcdir}"/soci-cmake-sociconfig.patch
+  patch -p1 -i "${srcdir}"/soci-tests-catch.patch
 }
 
 build() {

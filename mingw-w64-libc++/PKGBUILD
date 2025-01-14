@@ -8,13 +8,13 @@ _realname=libc++
 pkgbase=mingw-w64-${_realname}
 pkgname=("${MINGW_PACKAGE_PREFIX}-${_realname}"
          "${MINGW_PACKAGE_PREFIX}-libunwind")
-_version=18.1.8
+_version=19.1.6
 _rc=""
 _tag=llvmorg-${_version}${_rc}
 pkgver=${_version}${_rc/-/}
-pkgrel=2
+pkgrel=1
 arch=(any)
-mingw_arch=('mingw32' 'mingw64' 'ucrt64' 'clang64' 'clang32' 'clangarm64')
+mingw_arch=('mingw32' 'mingw64' 'ucrt64' 'clang64' 'clangarm64')
 url="https://libcxx.llvm.org/"
 msys2_references=(
   "cpe: cpe:/a:llvm:llvm"
@@ -38,17 +38,17 @@ source=("${_url}/libcxx-${pkgver}.src.tar.xz"{,.sig}
         "${_url}/runtimes-${pkgver}.src.tar.xz"{,.sig}
         "${_url}/llvm-${pkgver}.src.tar.xz"{,.sig}
         "${_url}/cmake-${pkgver}.src.tar.xz"{,.sig})
-sha256sums=('bdecf90be0072bc720fd5c9c8ab061cdb197edd0c8ad3e170dc3e6bfaa49f388'
+sha256sums=('bfa95b7777d1aafde91df6362542cea4b2f8b8575cf2c4c950e382f5962fe2df'
             'SKIP'
-            '256c30d724eeb72713bc08ae1692f53aaf4ebe8a1d662c92bf59e69d6c53dce9'
+            '8821056b55d01f6902cac47ea9db87c27f541922eedea830e27b51c85825d7dc'
             'SKIP'
-            'c31577d16978b0da0e472ef751f74893a5b459a7ea4a383b75f7ab93cf1e6877'
+            '34eab971069837be770e44f3543f1eb50f385575e8f29d1b5e1a67e7c482f680'
             'SKIP'
-            '9997c2e91e5438e2963306ba5019d85b5384b467535632738d8670ced8f07cb3'
+            'a242d2aeaafbc259901d0f5b962874ed8e6ff0b51993036e08ae5d28be2f6e68'
             'SKIP'
-            'f68cf90f369bc7d0158ba70d860b0cb34dbc163d6ff0ebc6cfa5e515b9b2e28d'
+            'ad1a3b125ff014ded290094088de40efb9193ce81a24278184230b7d401f8a3e'
             'SKIP'
-            '59badef592dd34893cd319d42b323aaa990b452d05c7180ff20f23ab1b41e837'
+            '9c7ec82d9a240dc2287b8de89d6881bb64ceea0dcd6ce133c34ef65bda22d99e'
             'SKIP')
 validpgpkeys=('B6C8F98282B944E3B0D5C2530FC3042E345AD05D'  # Hans Wennborg, Google.
               '474E22316ABF4785A88C6E8EA2C794A986419D8A'  # Tom Stellard
@@ -58,7 +58,7 @@ noextract=(libcxx-${pkgver}.src.tar.xz)
 prepare() {
   plain "Extracting libcxx-${pkgver}.src.tar.xz due to symlink(s) without pre-existing target(s)"
   cd "${srcdir}"
-  tar -xJf ${srcdir}/libcxx-${pkgver}.src.tar.xz -C ${srcdir} || true
+  tar -xJf "${srcdir}"/libcxx-${pkgver}.src.tar.xz -C "${srcdir}" || true
   # Rename Directories
   for pkg in cmake libcxx libcxxabi libunwind llvm runtimes; do
     mv ${pkg}-$pkgver.src ${pkg}
@@ -122,6 +122,7 @@ build() {
     -DLIBUNWIND_ENABLE_FRAME_APIS=ON \
     -DLIBUNWIND_ENABLE_SHARED=ON \
     -DLIBUNWIND_ENABLE_STATIC=ON \
+    -DLLVM_INCLUDE_TESTS=OFF \
     "${_extra_config[@]}" \
     -DPython3_EXECUTABLE=${MINGW_PREFIX}/bin/python.exe \
     -Wno-dev \

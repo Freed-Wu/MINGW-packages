@@ -7,7 +7,7 @@ pkgver=1.3.2
 pkgrel=2
 pkgdesc="LFC C++ xml classes (mingw-w64)"
 arch=('any')
-mingw_arch=('mingw32' 'mingw64' 'ucrt64' 'clang64' 'clangarm64' 'clang32')
+mingw_arch=('mingw32' 'mingw64' 'ucrt64' 'clang64' 'clangarm64')
 url='http://www.lemke-it.com/'
 license=('GPL3')
 
@@ -23,9 +23,8 @@ prepare() {
 }
 
 build() {
-  cd "$srcdir"/${_realname}-${pkgver}
-  [[ -d "${srcdir}"/build-${MSYSTEM} ]] && rm -rf "${srcdir}"/build-${MSYSTEM}
   mkdir -p "${srcdir}"/build-${MSYSTEM} && cd "${srcdir}"/build-${MSYSTEM}
+
   ../${_realname}-${pkgver}/configure \
     --prefix=${MINGW_PREFIX} \
     --build=${MINGW_CHOST} \
@@ -39,7 +38,7 @@ build() {
   ${CC} -shared \
     -Wl,--out-implib,liblfcxml.dll.a \
     -o liblfcxml-0.dll \
-    ${srcdir}/build-${MSYSTEM}/src/*.o \
+    "${srcdir}"/build-${MSYSTEM}/src/*.o \
     -llfcbase -lsystre -lws2_32 -lpthread -lstdc++
 
 }

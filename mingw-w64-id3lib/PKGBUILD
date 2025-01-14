@@ -7,13 +7,12 @@ pkgver=3.8.3
 pkgrel=4
 pkgdesc='Library for reading, writing, and manipulating ID3v1 and ID3v2 tags (mingw-w64)'
 arch=('any')
-mingw_arch=('mingw32' 'mingw64' 'ucrt64' 'clang64' 'clang32' 'clangarm64')
+mingw_arch=('mingw32' 'mingw64' 'ucrt64' 'clang64' 'clangarm64')
 license=('LGPL')
 url="https://id3lib.sourceforge.io/"
 msys2_references=(
   'cpe: cpe:/a:id3lib:id3lib'
 )
-options=('staticlibs')
 depends=("${MINGW_PACKAGE_PREFIX}-gcc-libs"
          "${MINGW_PACKAGE_PREFIX}-zlib"
          "${MINGW_PACKAGE_PREFIX}-libiconv")
@@ -81,7 +80,6 @@ prepare() {
 }
 
 build() {
-  [[ -d "${srcdir}/build-${MSYSTEM}" ]] && rm -rf "${srcdir}/build-${MSYSTEM}"
   mkdir -p "${srcdir}/build-${MSYSTEM}" && cd "${srcdir}/build-${MSYSTEM}"
 
   ../${_realname}-${pkgver}/configure \
@@ -104,5 +102,5 @@ package() {
   make DESTDIR="${pkgdir}" install
 
   install -d "${pkgdir}${MINGW_PREFIX}"/share/man/man1
-  cp ${srcdir}/${_realname}-${pkgver}/doc/man/* "${pkgdir}${MINGW_PREFIX}"/share/man/man1
+  cp "${srcdir}"/${_realname}-${pkgver}/doc/man/* "${pkgdir}${MINGW_PREFIX}"/share/man/man1
 }

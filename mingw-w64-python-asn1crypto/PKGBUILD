@@ -7,7 +7,7 @@ provides=("${MINGW_PACKAGE_PREFIX}-python3-${_realname}")
 conflicts=("${MINGW_PACKAGE_PREFIX}-python3-${_realname}")
 replaces=("${MINGW_PACKAGE_PREFIX}-python3-${_realname}")
 pkgver=1.5.1
-pkgrel=3
+pkgrel=4
 pkgdesc="Python ASN.1 library with a focus on performance and a pythonic API (mingw-w64)"
 url='https://github.com/wbond/asn1crypto'
 msys2_references=(
@@ -15,25 +15,25 @@ msys2_references=(
 )
 license=('MIT')
 arch=('any')
-mingw_arch=('mingw32' 'mingw64' 'ucrt64' 'clang64' 'clang32' 'clangarm64')
+mingw_arch=('mingw32' 'mingw64' 'ucrt64' 'clang64' 'clangarm64')
 depends=("${MINGW_PACKAGE_PREFIX}-python-pycparser")
 makedepends=("${MINGW_PACKAGE_PREFIX}-python-setuptools")
 source=("${_realname}-${pkgver}.tar.gz::https://github.com/wbond/asn1crypto/archive/${pkgver}.tar.gz")
 sha256sums=('c06e6827971891a7c42299eff3f0881d6fbf1ada53f11c5797240a9c0cec6a1c')
 
 prepare() {
-  cd ${srcdir}
-  cp -r ${_realname}-${pkgver} python-build-${CARCH}
+  cd "${srcdir}"
+  cp -r ${_realname}-${pkgver} python-build-${MSYSTEM}
 }
 
 build() {
-  msg "Python build for ${CARCH}"
-  cd "${srcdir}/python-build-${CARCH}"
+  msg "Python build for ${MSYSTEM}"
+  cd "${srcdir}/python-build-${MSYSTEM}"
   ${MINGW_PREFIX}/bin/python setup.py build
 }
 
 package() {
-  cd ${srcdir}/python-build-${CARCH}
+  cd "${srcdir}"/python-build-${MSYSTEM}
   MSYS2_ARG_CONV_EXCL="--prefix=;--install-scripts=;--install-platlib=" \
   ${MINGW_PREFIX}/bin/python setup.py install --prefix=${MINGW_PREFIX} --root="${pkgdir}" --skip-build
 

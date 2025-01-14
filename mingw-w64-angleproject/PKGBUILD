@@ -6,7 +6,7 @@ _realname=angleproject
 pkgbase=mingw-w64-${_realname}
 pkgname="${MINGW_PACKAGE_PREFIX}-${_realname}"
 pkgver=2.1.r21358.2e285bb5
-pkgrel=5
+pkgrel=8
 pkgdesc='A conformant OpenGL ES implementation for Windows, Mac, Linux, iOS and Android (mingw-w64)'
 arch=('any')
 mingw_arch=('mingw64' 'ucrt64' 'clang64' 'clangarm64')
@@ -26,7 +26,6 @@ makedepends=("${MINGW_PACKAGE_PREFIX}-cc"
              "${MINGW_PACKAGE_PREFIX}-python"
              "git")
 _commit=("2e285bb591f78af3b5b1f83617e06f9ef9067924")
-options=('!buildflags')
 source=("${_realname}::git+https://chromium.googlesource.com/angle/angle.git#commit=${_commit}"
         "bare-clones/build::git+https://chromium.googlesource.com/chromium/src/build.git#commit=ccb49e801879c107ed6e96a84eb227f65ce4823b"
         "bare-clones/zlib::git+https://chromium.googlesource.com/chromium/src/third_party/zlib.git#commit=90e67ba3f8998a3532fc8e3db9539aada8060d43"
@@ -66,8 +65,8 @@ sha256sums=('SKIP'
             'SKIP'
             'SKIP'
             'SKIP'
-            '16db1feedcb5d2e8e1a9b20ac96f0be2f56d2419001de99cfd3d4508a2ec4242'
-            '1ebc64c413b774c7afca13cbff255dca2d545b3817d08af0cfe7fd3668dd83a3'
+            '573a9e12727926e2ddddf0863bed926ef3764ec64ab75d27e3ec48648849786d'
+            'c7fc66c1c0b154eb61c666f845720b576187984d139f64ef452467d5efff4509'
             '04bcb05dc2f349639bf4e62ee92d758b756e56532ceb9184c2d7dca01e67a38e'
             'c3ee4b4194c041db225bcf3f699bf1042ddc0c845b1da142ca07a8bf1f7f80f8'
             'ced98a61919f7fdb10dbff26dfbd4ea11b034eaaeb3433f0fa5c4c998519e171'
@@ -81,7 +80,6 @@ sha256sums=('SKIP'
             '4dc3baf79ba7c95b52cbbafce81b26e6d165d4ae7e0dcc2eabe0250466edf178')
 noextract=("swiftshader.zip")
 
-# Helper macros to help make tasks easier #
 apply_patch_with_msg() {
   for _patch in "$@"
   do
@@ -99,64 +97,64 @@ pkgver() {
 
 prepare() {
   echo ":: Patching build directory"
-  cd ${srcdir}/build
-  patch -p1 -i ${srcdir}/001-add-mingw-toolchain.patch
-  python ${srcdir}/build/util/lastchange.py -o ${srcdir}/build/util/LASTCHANGE
-  rm -rf ${srcdir}/${_realname}/build
-  ln -sf ${srcdir}/build ${srcdir}/${_realname}
-  echo "checkout_google_benchmark = false" > ${srcdir}/${_realname}/build/config/gclient_args.gni
+  cd "${srcdir}"/build
+  patch -p1 -i "${srcdir}"/001-add-mingw-toolchain.patch
+  python "${srcdir}"/build/util/lastchange.py -o "${srcdir}"/build/util/LASTCHANGE
+  rm -rf "${srcdir}"/${_realname}/build
+  ln -sf "${srcdir}"/build "${srcdir}"/${_realname}
+  echo "checkout_google_benchmark = false" > "${srcdir}"/${_realname}/build/config/gclient_args.gni
 
   echo ":: Patching zlib directory"
-  mkdir -p ${srcdir}/${_realname}/third_party/zlib
-  ln -sf ${srcdir}/zlib.gn ${srcdir}/${_realname}/third_party/zlib/BUILD.gn
-  ln -sf ${srcdir}/zlib/google ${srcdir}/${_realname}/third_party/zlib
+  mkdir -p "${srcdir}"/${_realname}/third_party/zlib
+  ln -sf "${srcdir}"/zlib.gn "${srcdir}"/${_realname}/third_party/zlib/BUILD.gn
+  ln -sf "${srcdir}"/zlib/google "${srcdir}"/${_realname}/third_party/zlib
 
   echo ":: Extracting SwiftShader"
-  cd ${srcdir}
+  cd "${srcdir}"
   bsdtar -xf swiftshader.zip || bsdtar -xf swiftshader.zip
   mv swiftshader-* SwiftShader
 
   echo ":: Patching SwiftShader directory"
-  cd ${srcdir}/SwiftShader
-  patch -p1 -i ${srcdir}/004-swiftshader-updates.patch
-  patch -p1 -i ${srcdir}/008-arm64-mingw-intrinsic.patch
-  ln -sf ${srcdir}/SwiftShader ${srcdir}/${_realname}/third_party
+  cd "${srcdir}"/SwiftShader
+  patch -p1 -i "${srcdir}"/004-swiftshader-updates.patch
+  patch -p1 -i "${srcdir}"/008-arm64-mingw-intrinsic.patch
+  ln -sf "${srcdir}"/SwiftShader "${srcdir}"/${_realname}/third_party
 
   echo ":: Patching vulkan_memory_allocator directory"
-  cd ${srcdir}/vulkan_memory_allocator
-  patch -p1 -i ${srcdir}/005-vulkan-memory-allocator-updates.patch
-  ln -sf ${srcdir}/vulkan_memory_allocator ${srcdir}/${_realname}/third_party
+  cd "${srcdir}"/vulkan_memory_allocator
+  patch -p1 -i "${srcdir}"/005-vulkan-memory-allocator-updates.patch
+  ln -sf "${srcdir}"/vulkan_memory_allocator "${srcdir}"/${_realname}/third_party
 
   echo ":: Patching spirv-tools directory"
-  cd ${srcdir}/spirv-tools
-  patch -p1 -i ${srcdir}/006-spirv-updates.patch
+  cd "${srcdir}"/spirv-tools
+  patch -p1 -i "${srcdir}"/006-spirv-updates.patch
 
   echo ":: Patching vulkan-loader directory"
-  cd ${srcdir}/vulkan-loader
-  patch -p1 -i ${srcdir}/007-vulkan-loader-updates.patch
+  cd "${srcdir}"/vulkan-loader
+  patch -p1 -i "${srcdir}"/007-vulkan-loader-updates.patch
 
   echo ":: Copying vulkan-deps files"
-  ln -sf ${srcdir}/vulkan-deps ${srcdir}/${_realname}/third_party
-  cp -rf ${srcdir}/spirv-headers ${srcdir}/${_realname}/third_party/vulkan-deps/spirv-headers/src
-  cp -rf ${srcdir}/spirv-tools ${srcdir}/${_realname}/third_party/vulkan-deps/spirv-tools/src
-  cp -rf ${srcdir}/vulkan-headers ${srcdir}/${_realname}/third_party/vulkan-deps/vulkan-headers/src
-  cp -rf ${srcdir}/vulkan-loader ${srcdir}/${_realname}/third_party/vulkan-deps/vulkan-loader/src
-  cp -rf ${srcdir}/vulkan-tools ${srcdir}/${_realname}/third_party/vulkan-deps/vulkan-tools/src
-  cp -rf ${srcdir}/vulkan-validation-layers ${srcdir}/${_realname}/third_party/vulkan-deps/vulkan-validation-layers/src
+  ln -sf "${srcdir}"/vulkan-deps "${srcdir}"/${_realname}/third_party
+  cp -rf "${srcdir}"/spirv-headers "${srcdir}"/${_realname}/third_party/vulkan-deps/spirv-headers/src
+  cp -rf "${srcdir}"/spirv-tools "${srcdir}"/${_realname}/third_party/vulkan-deps/spirv-tools/src
+  cp -rf "${srcdir}"/vulkan-headers "${srcdir}"/${_realname}/third_party/vulkan-deps/vulkan-headers/src
+  cp -rf "${srcdir}"/vulkan-loader "${srcdir}"/${_realname}/third_party/vulkan-deps/vulkan-loader/src
+  cp -rf "${srcdir}"/vulkan-tools "${srcdir}"/${_realname}/third_party/vulkan-deps/vulkan-tools/src
+  cp -rf "${srcdir}"/vulkan-validation-layers "${srcdir}"/${_realname}/third_party/vulkan-deps/vulkan-validation-layers/src
 
   echo ":: Soft linking extra repos"
-  mkdir -p ${srcdir}/${_realname}/third_party/libjpeg
-  ln -sf ${srcdir}/jpeg.gn ${srcdir}/${_realname}/third_party/libjpeg/BUILD.gn
-  mkdir -p ${srcdir}/${_realname}/third_party/jsoncpp
-  ln -sf ${srcdir}/jsoncpp.gn ${srcdir}/${_realname}/third_party/jsoncpp/BUILD.gn
-  rm -f ${srcdir}/${_realname}/third_party/libpng/BUILD.gn
-  ln -sf ${srcdir}/png.gn ${srcdir}/${_realname}/third_party/libpng/BUILD.gn
-  rm -f ${srcdir}/${_realname}/third_party/rapidjson/BUILD.gn
-  ln -sf ${srcdir}/rjson.gn ${srcdir}/${_realname}/third_party/rapidjson/BUILD.gn
-  ln -sf ${srcdir}/clang ${srcdir}/${_realname}/tools
+  mkdir -p "${srcdir}"/${_realname}/third_party/libjpeg
+  ln -sf "${srcdir}"/jpeg.gn "${srcdir}"/${_realname}/third_party/libjpeg/BUILD.gn
+  mkdir -p "${srcdir}"/${_realname}/third_party/jsoncpp
+  ln -sf "${srcdir}"/jsoncpp.gn "${srcdir}"/${_realname}/third_party/jsoncpp/BUILD.gn
+  rm -f "${srcdir}"/${_realname}/third_party/libpng/BUILD.gn
+  ln -sf "${srcdir}"/png.gn "${srcdir}"/${_realname}/third_party/libpng/BUILD.gn
+  rm -f "${srcdir}"/${_realname}/third_party/rapidjson/BUILD.gn
+  ln -sf "${srcdir}"/rjson.gn "${srcdir}"/${_realname}/third_party/rapidjson/BUILD.gn
+  ln -sf "${srcdir}"/clang "${srcdir}"/${_realname}/tools
 
   echo ":: Patching angle source"
-  cd ${srcdir}/${_realname}
+  cd "${srcdir}"/${_realname}
   apply_patch_with_msg \
     002-buildflags-fixes.patch \
     003-angle-src-fixes.patch
@@ -200,7 +198,7 @@ build() {
     export AR=ar
   fi
 
-  ${MINGW_PREFIX}/bin/gn gen out/${_target}-${MSYSTEM} --args="
+  gn gen out/${_target}-${MSYSTEM} --args="
     target_cpu=\"${_arch}\"
     is_debug=${_debug}
     is_clang=${_clang}
@@ -216,7 +214,7 @@ build() {
     use_sysroot=false
     treat_warnings_as_errors=false"
 
-  ${MINGW_PREFIX}/bin/ninja -C out/${_target}-${MSYSTEM}
+  ninja -C out/${_target}-${MSYSTEM}
 }
 
 package() {
@@ -227,18 +225,18 @@ package() {
     _target=Debug
   fi
 
-  mkdir -p ${pkgdir}${MINGW_PREFIX}/{bin,lib,include/{EGL,GLES2}}
+  mkdir -p "${pkgdir}"${MINGW_PREFIX}/{bin,lib,include/{EGL,GLES2}}
 
-  install -Dm755 out/${_target}-${MSYSTEM}/lib*.dll ${pkgdir}${MINGW_PREFIX}/bin/
-  install -Dm755 out/${_target}-${MSYSTEM}/lib*.dll.a ${pkgdir}${MINGW_PREFIX}/lib/
-  install -Dm755 out/${_target}-${MSYSTEM}/obj/lib*.a ${pkgdir}${MINGW_PREFIX}/lib/
+  install -Dm755 out/${_target}-${MSYSTEM}/lib*.dll "${pkgdir}"${MINGW_PREFIX}/bin/
+  install -Dm755 out/${_target}-${MSYSTEM}/lib*.dll.a "${pkgdir}"${MINGW_PREFIX}/lib/
+  install -Dm755 out/${_target}-${MSYSTEM}/obj/lib*.a "${pkgdir}"${MINGW_PREFIX}/lib/
 
   # Copy public ANGLE headers
-  install -Dm644 include/angle_gl.h ${pkgdir}${MINGW_PREFIX}/include
-  install -Dm644 include/angle_windowsstore.h ${pkgdir}${MINGW_PREFIX}/include
-  install -Dm644 include/EGL/eglext_angle.h ${pkgdir}${MINGW_PREFIX}/include/EGL
-  install -Dm644 include/GLES2/gl2ext_angle.h ${pkgdir}${MINGW_PREFIX}/include/GLES2
+  install -Dm644 include/angle_gl.h "${pkgdir}"${MINGW_PREFIX}/include
+  install -Dm644 include/angle_windowsstore.h "${pkgdir}"${MINGW_PREFIX}/include
+  install -Dm644 include/EGL/eglext_angle.h "${pkgdir}"${MINGW_PREFIX}/include/EGL
+  install -Dm644 include/GLES2/gl2ext_angle.h "${pkgdir}"${MINGW_PREFIX}/include/GLES2
 
   # Copy license
-  install -Dm644 LICENSE ${pkgdir}${MINGW_PREFIX}/share/licenses/${_realname}/LICENSE
+  install -Dm644 LICENSE "${pkgdir}"${MINGW_PREFIX}/share/licenses/${_realname}/LICENSE
 }

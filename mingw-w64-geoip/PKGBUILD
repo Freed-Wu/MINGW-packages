@@ -9,7 +9,7 @@ pkgver=1.6.12
 pkgrel=2
 pkgdesc="Non-DNS IP-to-country resolver C library & utils (mingw-w64)"
 arch=('any')
-mingw_arch=('mingw32' 'mingw64' 'ucrt64' 'clang64' 'clangarm64' 'clang32')
+mingw_arch=('mingw32' 'mingw64' 'ucrt64' 'clang64' 'clangarm64')
 url="https://www.maxmind.com/app/c"
 license=('LGPL')
 depends=("${MINGW_PACKAGE_PREFIX}-zlib")
@@ -25,8 +25,8 @@ prepare(){
 }
 
 build() {
-  [[ -d "${srcdir}"/build-${CARCH} ]] && rm -rf "${srcdir}"/build-${CARCH}
-  mkdir -p "${srcdir}"/build-${CARCH} && cd "${srcdir}"/build-${CARCH}
+  mkdir -p "${srcdir}"/build-${MSYSTEM} && cd "${srcdir}"/build-${MSYSTEM}
+
   ../${_pkgname}-${pkgver}/configure \
     --prefix=${MINGW_PREFIX} \
     --build=${MINGW_CHOST} \
@@ -34,10 +34,11 @@ build() {
     --target=${MINGW_CHOST} \
     --enable-static \
     --enable-shared
+
   make
 }
 
 package() {
-  cd "${srcdir}"/build-${CARCH}
+  cd "${srcdir}"/build-${MSYSTEM}
   make install DESTDIR="${pkgdir}"
 }

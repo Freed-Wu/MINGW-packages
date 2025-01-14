@@ -7,7 +7,7 @@ pkgver=1.18.2
 pkgrel=4
 pkgdesc="A fairly comprehensive, modular and portable cryptographic toolkit (mingw-w64)"
 arch=('any')
-mingw_arch=('mingw32' 'mingw64' 'ucrt64' 'clang64' 'clangarm64' 'clang32')
+mingw_arch=('mingw32' 'mingw64' 'ucrt64' 'clang64' 'clangarm64')
 url="https://www.libtom.net/LibTomCrypt/"
 msys2_references=(
   "cpe: cpe:/a:libtom:libtomcrypt"
@@ -41,13 +41,13 @@ build() {
 }
 
 check() {
-  cd ${srcdir}/build-${MSYSTEM}
+  cd "${srcdir}"/build-${MSYSTEM}
 
   ./test.exe
 }
 
 package() {
-  cd ${srcdir}/build-${MSYSTEM}
+  cd "${srcdir}"/build-${MSYSTEM}
 
   make -f makefile.shared PREFIX="${MINGW_PREFIX}" DESTDIR="$pkgdir" install
   install -Dm644 doc/crypt.pdf "${pkgdir}${MINGW_PREFIX}/share/doc/${_realname}/crypt.pdf"

@@ -7,7 +7,7 @@ pkgver=2
 pkgrel=1
 pkgdesc='Utility library to help manage common tasks with OpenAL applications (mingw-w64)'
 arch=('any')
-mingw_arch=('mingw32' 'mingw64' 'ucrt64' 'clang64' 'clangarm64' 'clang32')
+mingw_arch=('mingw32' 'mingw64' 'ucrt64' 'clang64' 'clangarm64')
 url='https://kcat.tomasu.net/alure.html'
 license=('MIT')
 depends=("${MINGW_PACKAGE_PREFIX}-openal")
@@ -36,9 +36,7 @@ prepare() {
 }
 
 build() {
-  [[ -d "${srcdir}/build-${MINGW_CHOST}" ]] && rm -rf "${srcdir}/build-${MINGW_CHOST}"
-  mkdir -p "${srcdir}/build-${MINGW_CHOST}"
-  cd "${srcdir}/build-${MINGW_CHOST}"
+  mkdir -p "${srcdir}/build-${MSYSTEM}" && cd "${srcdir}/build-${MSYSTEM}"
 
   MSYS2_ARG_CONV_EXCL="-DCMAKE_INSTALL_PREFIX=" \
   ${MINGW_PREFIX}/bin/cmake \
@@ -51,7 +49,7 @@ build() {
 }
 
 package() {
-  cd "${srcdir}/build-${MINGW_CHOST}"
+  cd "${srcdir}/build-${MSYSTEM}"
 
   DESTDIR="${pkgdir}" ${MINGW_PREFIX}/bin/cmake --build . --target install
 

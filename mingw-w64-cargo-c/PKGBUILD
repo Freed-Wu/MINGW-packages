@@ -3,11 +3,11 @@
 _realname=cargo-c
 pkgbase=mingw-w64-${_realname}
 pkgname="${MINGW_PACKAGE_PREFIX}-${_realname}"
-pkgver=0.10.3
+pkgver=0.10.8
 pkgrel=1
 pkgdesc='A cargo subcommand to build and install C-ABI compatibile dynamic and static libraries (mingw-w64)'
 arch=('any')
-mingw_arch=('mingw32' 'mingw64' 'ucrt64' 'clang32' 'clang64' 'clangarm64')
+mingw_arch=('mingw32' 'mingw64' 'ucrt64' 'clang64' 'clangarm64')
 url='https://github.com/lu-zero/cargo-c/'
 msys2_references=(
   'archlinux: cargo-c'
@@ -16,7 +16,7 @@ msys2_references=(
 license=('spdx:MIT')
 depends=("${MINGW_PACKAGE_PREFIX}-sqlite3"
          "${MINGW_PACKAGE_PREFIX}-libssh2")
-         #"${MINGW_PACKAGE_PREFIX}-libgit2") uncomment after `git2` will be updated
+         #"${MINGW_PACKAGE_PREFIX}-libgit2")
 makedepends=("${MINGW_PACKAGE_PREFIX}-rust"
              "${MINGW_PACKAGE_PREFIX}-pkgconf"
              "${MINGW_PACKAGE_PREFIX}-openssl")
@@ -24,9 +24,9 @@ options=('!strip')
 source=("https://github.com/lu-zero/cargo-c/archive/v${pkgver}/${_realname}-${pkgver}.tar.gz"
         "${_realname}-${pkgver}.Cargo.lock"::"https://github.com/lu-zero/cargo-c/releases/download/v${pkgver}/Cargo.lock"
         001-add-lib-prefix-on-windows-gnu.patch)
-sha256sums=('922171afb3ceaf6553ff3916ae4663d3743ba22f80725f2300a26b76eb6eb94f'
-            '6c099fe28666e4c6b5da41b65d00de35c9c60ab336c625d845f28055a0e90a7d'
-            '6953c5161a4b03a5c4919e31178011f6d9eb93548055c521348a067397cb9290')
+sha256sums=('2c7bfff50e9c11801c92280f34f7d308857652b0c3875d0fd0906167623414ac'
+            'f3c1e2e8fb2e78fac3a84f32c83fd68c69e6761c622bb948ddd1be194e03c57d'
+            'a35e7fbfc0d4113154572ae204c0a6bdf21d1ec12ac6882a133b51e211467805')
 
 prepare() {
     cp "${_realname}-${pkgver}.Cargo.lock" "${_realname}-${pkgver}/Cargo.lock"
@@ -34,11 +34,11 @@ prepare() {
 
     patch -p1 -i "${srcdir}"/001-add-lib-prefix-on-windows-gnu.patch
 
-    # cargo update -p git2 --precise 0.19.0
     cargo fetch --locked --target "$(rustc -vV | sed -n 's/host: //p')"
 }
 
 _env() {
+    # not compatible with libgit2 1.9+
     # export LIBGIT2_NO_VENDOR=1
     export OPENSSL_NO_VENDOR=1
     export LIBSSH2_SYS_USE_PKG_CONFIG=1

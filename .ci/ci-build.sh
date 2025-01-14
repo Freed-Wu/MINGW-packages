@@ -123,6 +123,9 @@ pacman -Sy
 # Remove git and python
 pacman -R --recursive --unneeded --noconfirm --noprogressbar git python
 
+# Install ntldd
+pacman -S --needed --noconfirm ${MINGW_PACKAGE_PREFIX}-ntldd
+
 # Enable linting
 export MAKEPKG_LINT_PKGBUILD=1
 
@@ -163,7 +166,7 @@ for package in "${packages[@]}"; do
         if [ "${#binaries[@]}" -ne 0 ]; then
             for binary in ${binaries[@]}; do
                 echo "${binary}:"
-                ntldd -R ${binary} | grep -v "ext-ms\|api-ms\|WINDOWS\|Windows\|HvsiFileTrust\|wpaxholder\|ngcrecovery" || true
+                ntldd -R ${binary} | grep -v "ext-ms\|api-ms\|WINDOWS\|Windows\|HvsiFileTrust\|wpaxholder\|ngcrecovery\|AzureAttest\|PdmUtilities\|WTDSENSOR\|wtdccm" || true
             done
         fi
         echo "::endgroup::"

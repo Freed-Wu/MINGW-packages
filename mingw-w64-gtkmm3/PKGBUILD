@@ -7,7 +7,7 @@ pkgver=3.24.9
 pkgrel=1
 pkgdesc="C++ bindings for gtk3 (mingw-w64)"
 arch=('any')
-mingw_arch=('mingw32' 'mingw64' 'ucrt64' 'clang64' 'clang32' 'clangarm64')
+mingw_arch=('mingw32' 'mingw64' 'ucrt64' 'clang64' 'clangarm64')
 url="https://www.gtkmm.org/"
 license=("LGPL")
 depends=("${MINGW_PACKAGE_PREFIX}-atkmm"
@@ -27,7 +27,6 @@ prepare() {
 }
 
 build() {
-  [[ -d "${srcdir}/build-${MSYSTEM}" ]] && rm -rf "${srcdir}/build-${MSYSTEM}"
   mkdir -p "${srcdir}/build-${MSYSTEM}" && cd "${srcdir}/build-${MSYSTEM}"
 
   declare -a extra_config

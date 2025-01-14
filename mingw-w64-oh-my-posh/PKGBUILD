@@ -3,7 +3,7 @@
 _realname=oh-my-posh
 pkgbase=mingw-w64-${_realname}
 pkgname="${MINGW_PACKAGE_PREFIX}-${_realname}"
-pkgver=23.6.3
+pkgver=24.18.0
 pkgrel=1
 pkgdesc="A prompt theme engine for any shell (mingw-w64)"
 arch=('any')
@@ -18,7 +18,7 @@ makedepends=("${MINGW_PACKAGE_PREFIX}-go"
              "${MINGW_PACKAGE_PREFIX}-cc")
 optdepends=("${MINGW_PACKAGE_PREFIX}-ttf-font-nerd: to have icons in prompt themes")
 source=("https://github.com/JanDeDobbeleer/oh-my-posh/archive/v${pkgver}/${_realname}-${pkgver}.tar.gz")
-sha256sums=('07f3dfce2b10d0134f208d34ad46f123dd826187ba9d37ba81f0335d017f6fe3')
+sha256sums=('2ba43b849e9b06cc87cc4127dd3faae5caf359ae7c9ee617e4c04a1e9e0620ce')
 
 build() {
     export GOOS=windows
@@ -33,7 +33,7 @@ build() {
     go build \
       -ldflags="-linkmode=external \
       -X github.com/jandedobbeleer/oh-my-posh/src/build.Version=${pkgver} \
-      -X github.com/jandedobbeleer/oh-my-posh/src/build.Date=$(date +%F)" \
+      -X github.com/jandedobbeleer/oh-my-posh/src/build.Date=$(date --utc --date="@${SOURCE_DATE_EPOCH:-$(date +%s)}" --iso-8601=seconds)" \
       -o "${_realname}.exe"
 }
 

@@ -12,7 +12,7 @@ _dir="Tk_Library_Source_Code-$_hash"
 pkgrel=1
 pkgdesc="A companion to Tcllib, for Tk related packages (mingw-w64)"
 arch=('any')
-mingw_arch=('mingw32' 'mingw64' 'ucrt64' 'clang64' 'clang32' 'clangarm64')
+mingw_arch=('mingw32' 'mingw64' 'ucrt64' 'clang64' 'clangarm64')
 conflicts=("${MINGW_PACKAGE_PREFIX}-${_realname}-git")
 replaces=("${MINGW_PACKAGE_PREFIX}-${_realname}-git")
 url='https://core.tcl.tk/tklib/home'
@@ -24,7 +24,7 @@ source=("https://core.tcl-lang.org/tklib/tarball/$_hash/$_dir.tar.gz")
 sha256sums=('05b87db9ad2173e19176887941ab2852978f94a1885f86ef64e862876e986bfa')
 
 build() {
-  cd ${srcdir}/${_dir}
+  cd "${srcdir}"/${_dir}
   ./configure \
     --prefix=${MINGW_PREFIX} \
     --build=${MINGW_CHOST} \
@@ -34,8 +34,8 @@ build() {
 }
 
 package() {
-  cd ${srcdir}/${_dir}
+  cd "${srcdir}"/${_dir}
   make DESTDIR="${pkgdir}" install
-  mkdir -p ${pkgdir}${MINGW_PREFIX}/share/licenses/${_realname}/
-  cp license.terms ${pkgdir}${MINGW_PREFIX}/share/licenses/${_realname}/COPYING
+  mkdir -p "${pkgdir}"${MINGW_PREFIX}/share/licenses/${_realname}/
+  cp license.terms "${pkgdir}"${MINGW_PREFIX}/share/licenses/${_realname}/COPYING
 }

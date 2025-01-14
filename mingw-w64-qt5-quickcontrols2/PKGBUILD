@@ -3,13 +3,13 @@
 _realname=qt5-quickcontrols2
 pkgbase="mingw-w64-${_realname}"
 pkgname=("${MINGW_PACKAGE_PREFIX}-${_realname}"
-         $([[ ${CARCH} == i686 ]] || echo "${MINGW_PACKAGE_PREFIX}-${_realname}-debug"))
-_qtver=5.15.14
+         "${MINGW_PACKAGE_PREFIX}-${_realname}-debug")
+_qtver=5.15.16
 pkgver=${_qtver}+kde+r5
 pkgrel=1
 pkgdesc="Next generation user interface controls based on Qt Quick (mingw-w64)"
 arch=('any')
-mingw_arch=('mingw32' 'mingw64' 'ucrt64' 'clang64' 'clangarm64')
+mingw_arch=('mingw64' 'ucrt64' 'clang64' 'clangarm64')
 url='https://www.qt.io/'
 msys2_references=(
   "cpe: cpe:/a:qt:qt"
@@ -20,9 +20,9 @@ makedepends=("${MINGW_PACKAGE_PREFIX}-cc"
              "git"
              "rsync")
 _pkgfn="${_realname/5-/}"
-_commit=69fea340f8f4c483a9b2889e4e24a4b1b52ebc87
+_commit=8f244d09b22ed68b3aefaa8e521c8d68d18cada7
 source=(git+https://invent.kde.org/qt/qt/$_pkgfn#commit=$_commit)
-sha256sums=('afb849d5be3d902af4158eeff1103762440ebc3a968b7c665095d28dd316fde0')
+sha256sums=('cf59dc4a43ec3e57cf6e970aa3937ac851f128ca6a4a448cd7fed132d8cb2f69')
 
 pkgver() {
   cd $_pkgfn
@@ -46,7 +46,7 @@ check() {
 package_qt5-quickcontrols2() {
   depends=("${MINGW_PACKAGE_PREFIX}-qt5-declarative")
   optdepends=("${MINGW_PACKAGE_PREFIX}-qt5-graphicaleffects")
-  groups=($([[ ${CARCH} == i686 ]] || echo "${MINGW_PACKAGE_PREFIX}-qt5"))
+  groups=("${MINGW_PACKAGE_PREFIX}-qt5")
 
   cd build-${MSYSTEM}
 
@@ -57,21 +57,19 @@ package_qt5-quickcontrols2() {
   find "${srcdir}/build-${MSYSTEM}" -type f \( -name 'Makefile*' \) \
       -exec sed -i -e "s|)${PREFIX_WIN:2}|)${MINGW_PREFIX}|g" {} \;
 
-  local PKGDIR=$(cygpath -am ${pkgdir})
+  local PKGDIR=$(cygpath -am "${pkgdir}")
   make INSTALL_ROOT="${PKGDIR}" install
 
   install -d "$pkgdir${MINGW_PREFIX}"/share/licenses/${_realname}
   install -Dm644 $srcdir/${_pkgfn}/LICENSE* -t "$pkgdir${MINGW_PREFIX}"/share/licenses/${_realname}
 
-  if [[ ${CARCH} != i686 ]]; then
   # Seperate debug-info files
   mv -f "${pkgdir}${MINGW_PREFIX}/lib"/*.debug "${pkgdir}${MINGW_PREFIX}/bin"/ || true
-  rsync -armR --remove-source-files --include="*/" --include="*.debug" --exclude="*" --prune-empty-dirs ${pkgdir}/.${MINGW_PREFIX} ${srcdir}/${MSYSTEM}-debug/
-  fi
+  rsync -armR --remove-source-files --include="*/" --include="*.debug" --exclude="*" --prune-empty-dirs "${pkgdir}"/.${MINGW_PREFIX} "${srcdir}"/${MSYSTEM}-debug/
 
   # Fix paths in *.pri, *prl and *.pc files:
-  #   $(cygpath -m ${MINGW_PREFIX}) -> $(cygpath -m ${pkgdir}${MINGW_PREFIX})
-  local PKGDIR_PREFIX_WIN=$(cygpath -m ${pkgdir}${MINGW_PREFIX})
+  #   $(cygpath -m ${MINGW_PREFIX}) -> $(cygpath -m "${pkgdir}"${MINGW_PREFIX})
+  local PKGDIR_PREFIX_WIN=$(cygpath -m "${pkgdir}"${MINGW_PREFIX})
   local FAKE_PREFIX_FOR_REPLACE="@@QT_REAL_PREFIX/dir@@"
 
   find "${pkgdir}${MINGW_PREFIX}/share/qt5" -type f \( -name '*.pri' -o -name '*.prl' \) \
@@ -93,7 +91,7 @@ package_qt5-quickcontrols2-debug() {
   groups=("${MINGW_PACKAGE_PREFIX}-qt5-debug")
   options=('!strip')
 
-  cp -rf ${srcdir}/${MSYSTEM}-debug${MINGW_PREFIX} "${pkgdir}"/
+  cp -rf "${srcdir}"/${MSYSTEM}-debug${MINGW_PREFIX} "${pkgdir}"/
 }
 
 # template start; name=mingw-w64-splitpkg-wrappers; version=1.0;

@@ -7,7 +7,7 @@ pkgver=2.13
 pkgrel=2
 pkgdesc="Page fault detection library (mingw-w64)"
 arch=('any')
-mingw_arch=('mingw32' 'mingw64' 'ucrt64' 'clang64' 'clang32')
+mingw_arch=('mingw32' 'mingw64' 'ucrt64' 'clang64')
 url="https://www.gnu.org/software/libsigsegv/"
 license=('GPL2')
 source=("${_realname}-${pkgver}.tar.gz"::"https://ftp.gnu.org/gnu/${_realname}/${_realname}-${pkgver}.tar.gz"
@@ -23,9 +23,8 @@ prepare() {
 }
 
 build() {
-  cd "${srcdir}"/${_realname}-${pkgver}
-  [[ -d "${srcdir}"/build-${CARCH} ]] && rm -rf "${srcdir}"/build-${CARCH}
-  mkdir -p "${srcdir}"/build-${CARCH} && cd "${srcdir}"/build-${CARCH}
+  mkdir -p "${srcdir}"/build-${MSYSTEM} && cd "${srcdir}"/build-${MSYSTEM}
+
   ../${_realname}-${pkgver}/configure \
     --prefix=${MINGW_PREFIX} \
     --build=${MINGW_CHOST} \
@@ -38,6 +37,6 @@ build() {
 }
 
 package() {
-  cd "${srcdir}"/build-${CARCH}
+  cd "${srcdir}"/build-${MSYSTEM}
   make install DESTDIR="${pkgdir}"
 }

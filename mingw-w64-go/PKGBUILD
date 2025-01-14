@@ -4,11 +4,11 @@
 _realname=go
 pkgbase=mingw-w64-${_realname}
 pkgname=("${MINGW_PACKAGE_PREFIX}-${_realname}")
-pkgver=1.23.0
+pkgver=1.23.4
 pkgrel=1
 pkgdesc="Go Lang (mingw-w64)"
 arch=('any')
-mingw_arch=('mingw32' 'mingw64' 'ucrt64' 'clang64' 'clang32' 'clangarm64')
+mingw_arch=('mingw32' 'mingw64' 'ucrt64' 'clang64' 'clangarm64')
 msys2_references=(
   'archlinux: go'
   "cpe: cpe:/a:golang:go"
@@ -22,7 +22,7 @@ makedepends=("${MINGW_PACKAGE_PREFIX}-${_realname}"
              "${MINGW_PACKAGE_PREFIX}-cc")
 options=('!strip')
 source=("https://go.dev/dl/go${pkgver}.src.tar.gz"{,.asc})
-sha256sums=('42b7a8e80d805daa03022ed3fde4321d4c3bf2c990a144165d01eeecd6f699c6'
+sha256sums=('ad345ac421e90814293a9699cca19dd5238251c3f687980bbcae28495b263531'
             'SKIP')
 validpgpkeys=('EB4C1BFD4F042F6DDDCCEC917721F63BD38B4796')
 noextract=(go${pkgver}.src.tar.gz)
@@ -38,7 +38,7 @@ apply_patch_with_msg() {
 # =========================================== #
 
 prepare() {
-  tar -xzf ${srcdir}/go${pkgver}.src.tar.gz -C ${srcdir} || true
+  tar -xzf "${srcdir}"/go${pkgver}.src.tar.gz -C "${srcdir}" || true
 }
 
 build() {

@@ -4,7 +4,7 @@ _realname=ruff
 pkgbase=mingw-w64-${_realname}
 pkgname=("${MINGW_PACKAGE_PREFIX}-${_realname}"
          "${MINGW_PACKAGE_PREFIX}-python-${_realname}")
-pkgver=0.6.3
+pkgver=0.9.1
 pkgrel=1
 pkgdesc="An extremely fast Python linter, written in Rust (mingw-w64)"
 arch=('any')
@@ -24,18 +24,12 @@ makedepends=(
   "${MINGW_PACKAGE_PREFIX}-python-installer"
   'git'
 )
-options=('!strip' '!lto')
-source=("git+${msys2_repository_url}.git#tag=${pkgver}"
-        "001-fix-building-with-gcc.patch")
-sha256sums=('6e2eeb5b2665e186e0814b8f4c585d678c25c208a5f42437c8a34fbf6fc59553'
-            'a266b1594ab3280525d7bce5adb91026c1e183696a4586255d4a0fcd008d41c2')
+options=('!strip')
+source=("git+${msys2_repository_url}.git#tag=${pkgver}")
+sha256sums=('3f5e398f02183ac4409e8a36d2749f4859f428277c17e7eaad4af01c77cc9773')
 
 prepare() {
   cd "${_realname}"
-
-  if [[ ${MINGW_PACKAGE_PREFIX} != *clang-* ]]; then
-    patch -p1 -i "${srcdir}"/001-fix-building-with-gcc.patch
-  fi
 
   # otherwise cargo installs msvc toolchain from rustup
   rm rust-toolchain.toml
@@ -46,6 +40,7 @@ prepare() {
 build() {
   cd "${_realname}"
 
+  export _PYTHON_HOST_PLATFORM=$(python -c "import sysconfig, sys; sys.stdout.write(sysconfig.get_platform())")
   export WINAPI_NO_BUNDLED_LIBRARIES=1
   maturin build --release --strip --frozen --all-features
 }

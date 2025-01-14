@@ -4,7 +4,7 @@ _realname=openvdb
 pkgbase=mingw-w64-${_realname}
 pkgname="${MINGW_PACKAGE_PREFIX}-${_realname}"
 pkgver=11.0.0
-pkgrel=1
+pkgrel=2
 pkgdesc="Sparse volume data structure and tools (mingw-w64)"
 arch=('any')
 mingw_arch=('mingw64' 'ucrt64' 'clang64' 'clangarm64')
@@ -81,8 +81,8 @@ build() {
 
 package() {
   cd "${srcdir}"/build-${MSYSTEM}
-  DESTDIR=${pkgdir} ${MINGW_PREFIX}/bin/cmake --install .
-  install -Dm644 ${srcdir}/openvdb-${pkgver}/LICENSE "${pkgdir}${MINGW_PREFIX}/share/licenses/${_realname}/LICENSE"
+  DESTDIR="${pkgdir}" ${MINGW_PREFIX}/bin/cmake --install .
+  install -Dm644 "${srcdir}"/openvdb-${pkgver}/LICENSE "${pkgdir}${MINGW_PREFIX}/share/licenses/${_realname}/LICENSE"
 
   # VTK requires FindOpenVDB to be in CMAKE_MODULE_PATH
   mkdir -p "${pkgdir}"${MINGW_PREFIX}/share/cmake/Modules/

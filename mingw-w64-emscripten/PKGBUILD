@@ -6,10 +6,10 @@ pkgname=("${MINGW_PACKAGE_PREFIX}-${_realname}")
 # Sadly, upstream currently suggests bundling a binaryen version for the time being:
 # https://github.com/emscripten-core/emscripten/issues/12252
 # I'm obviously unhappy about that but it appears to be the only practical solution for the time being.
-pkgver=3.1.65
+pkgver=3.1.74
 # NOTE: You need to run ./get-compatible-versions.sh after changing the pkgver!
-_binaryen_revision=2d99e10c03e619b01688268319c1cd43f7539e33
-_llvm_project_revision=547917aebd1e79a8929b53f0ddf3b5185ee4df74
+_binaryen_revision=52bc45fc34ec6868400216074744147e9d922685
+_llvm_project_revision=322eb1a92e6d4266184060346616fa0dbe39e731
 pkgrel=1
 pkgdesc="Compile C and C++ into highly-optimizable JavaScript for the web (mingw-w64)"
 arch=('any')
@@ -35,9 +35,9 @@ install="emscripten-${MSYSTEM}.install"
 source=("git+$msys2_repository_url#tag=$pkgver"
         "llvm-project-$_llvm_project_revision.tar.gz::https://github.com/llvm/llvm-project/archive/$_llvm_project_revision.tar.gz"
         "binaryen-$_binaryen_revision.tar.gz::https://github.com/WebAssembly/binaryen/archive/$_binaryen_revision.tar.gz")
-sha256sums=('9b67d98b1f18ec7824f5ba2dfabc1f0a70199dcad31cb9adea24678ef9ecb08e'
-            'd2f3bcf38edd5168f3e71b200bf19b6b3f0c7a459a73a8d7ad9486c7b74472bf'
-            '42f362b01bbdc5bf127f2b343c3f4921c50f40330e8e1bfd7e57beb20159f71a')
+sha256sums=('a2a13b0a1e871c05cb296435b199e799341e5af4d4cf788e9add8822278c9d15'
+            '528b7a7324343a3241ec211c5fb2c3c0fa56208107969f7deb4e9462bccd25a4'
+            'a1ade0b4203a4b96df18cad55a724e006603977ad11bcb84cfd79b2f2d92c76c')
 noextract=("llvm-project-$_llvm_project_revision.tar.gz")
 
 prepare() {
@@ -109,7 +109,7 @@ package() {
 
   # Clean up some unnecessary bins and libs
   rm clang-check.exe clang-cl.exe clang-cpp.exe clang-extdef-mapping.exe clang-format.exe \
-      clang-offload-bundler.exe clang-refactor.exe clang-rename.exe clang-scan-deps.exe \
+      clang-offload-bundler.exe clang-refactor.exe clang-scan-deps.exe \
       lld-link.exe ld.lld.exe llvm-lib.exe libclang.dll
   cd ..
   rm -r share

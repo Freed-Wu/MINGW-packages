@@ -6,14 +6,13 @@ pkgname="${MINGW_PACKAGE_PREFIX}-${_realname}"
 pkgver=0.20.6
 pkgrel=1
 arch=('any')
-mingw_arch=('mingw32' 'mingw64' 'ucrt64' 'clang64' 'clang32' 'clangarm64')
+mingw_arch=('mingw32' 'mingw64' 'ucrt64' 'clang64' 'clangarm64')
 pkgdesc="A collection library providing GObject-based interfaces and classes for commonly used data structures (mingw-w64)"
 depends=("${MINGW_PACKAGE_PREFIX}-glib2")
 makedepends=("${MINGW_PACKAGE_PREFIX}-cc"
              "${MINGW_PACKAGE_PREFIX}-autotools"
              "${MINGW_PACKAGE_PREFIX}-vala"
              "${MINGW_PACKAGE_PREFIX}-gobject-introspection")
-options=('strip' 'staticlibs')
 license=("LGPL2+")
 url="https://wiki.gnome.org/Projects/Libgee"
 msys2_references=(
@@ -27,15 +26,15 @@ msys2_repository_url="https://gitlab.gnome.org/GNOME/libgee"
 
 prepare() {
   cd "${srcdir}"/${_realname}-${pkgver}
-  patch -p1 -i ${srcdir}/0001-change-pkg-config-invocation.patch
+  patch -p1 -i "${srcdir}"/0001-change-pkg-config-invocation.patch
 
   # Get proper unprefixed directories for gobject-introspection files
   autoreconf -fiv
 }
 
 build() {
-  mkdir -p build-${MINGW_CHOST}
-  cd build-${MINGW_CHOST}
+  mkdir -p build-${MSYSTEM}
+  cd build-${MSYSTEM}
 
   ../${_realname}-${pkgver}/configure \
     --host=${MINGW_CHOST} \
@@ -48,8 +47,8 @@ build() {
 }
 
 package() {
-  cd "${srcdir}/build-${MINGW_CHOST}"
-  make DESTDIR=${pkgdir} install
+  cd "${srcdir}/build-${MSYSTEM}"
+  make DESTDIR="${pkgdir}" install
 
   install -Dm644 "${srcdir}/${_realname}-${pkgver}/COPYING" "${pkgdir}${MINGW_PREFIX}/share/licenses/${_realname}/COPYING"
 }

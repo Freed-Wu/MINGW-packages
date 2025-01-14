@@ -3,8 +3,8 @@
 _realname=SVT-AV1
 pkgbase=mingw-w64-svt-av1
 pkgname=("${MINGW_PACKAGE_PREFIX}-svt-av1")
-pkgver=2.1.2
-pkgrel=1
+pkgver=2.3.0
+pkgrel=2
 pkgdesc="Scalable Video Technology AV1 encoder and decoder (mingw-w64)"
 arch=('any')
 mingw_arch=('mingw64' 'ucrt64' 'clang64' 'clangarm64')
@@ -15,7 +15,7 @@ makedepends=("${MINGW_PACKAGE_PREFIX}-cmake"
              "${MINGW_PACKAGE_PREFIX}-nasm"
              "${MINGW_PACKAGE_PREFIX}-cc")
 source=("${url}/-/archive/v${pkgver}/${_realname}-v${pkgver}.tar.gz")
-sha256sums=('65e90af18f31f8c8d2e9febf909a7d61f36172536abb25a7089f152210847cd9')
+sha256sums=('ebb0b484ef4a0dc281e94342a9f73ad458496f5d3457eca7465bec943910c6c3')
 
 prepare() {
   cd "${srcdir}"/${_realname}-v${pkgver}
@@ -29,7 +29,6 @@ build() {
     extra_config+=("-DCMAKE_BUILD_TYPE=Debug")
   fi
 
-  [[ -d "${srcdir}"/build-${MSYSTEM}-static ]] && rm -rf "${srcdir}"/build-${MSYSTEM}-static
   mkdir -p "${srcdir}"/build-${MSYSTEM}-static && cd "${srcdir}"/build-${MSYSTEM}-static
 
   MSYS2_ARG_CONV_EXCL="-DCMAKE_INSTALL_PREFIX=" \
@@ -39,11 +38,11 @@ build() {
       "${extra_config[@]}" \
       -DBUILD_SHARED_LIBS=OFF \
       -DREPRODUCIBLE_BUILDS=ON \
+      -DSVT_AV1_LTO=OFF \
       ../${_realname}-v${pkgver}
 
   ${MINGW_PREFIX}/bin/cmake --build .
 
-  [[ -d "${srcdir}"/build-${MSYSTEM}-shared ]] && rm -rf "${srcdir}"/build-${MSYSTEM}-shared
   mkdir -p "${srcdir}"/build-${MSYSTEM}-shared && cd "${srcdir}"/build-${MSYSTEM}-shared
 
   MSYS2_ARG_CONV_EXCL="-DCMAKE_INSTALL_PREFIX=" \
@@ -54,6 +53,7 @@ build() {
       -DBUILD_SHARED_LIBS=ON \
       -DCMAKE_DLL_NAME_WITH_SOVERSION=ON \
       -DREPRODUCIBLE_BUILDS=ON \
+      -DSVT_AV1_LTO=OFF \
       ../${_realname}-v${pkgver}
 
   ${MINGW_PREFIX}/bin/cmake --build .
@@ -67,6 +67,6 @@ package() {
   cd "${srcdir}"/build-${MSYSTEM}-shared
   DESTDIR="${pkgdir}" ${MINGW_PREFIX}/bin/cmake --install .
 
-  install -Dm644 ${srcdir}/${_realname}-v${pkgver}/LICENSE.md ${pkgdir}${MINGW_PREFIX}/share/licenses/svt-av1/LICENSE
-  install -Dm644 ${srcdir}/${_realname}-v${pkgver}/PATENTS.md ${pkgdir}${MINGW_PREFIX}/share/licenses/svt-av1/PATENTS.md
+  install -Dm644 "${srcdir}"/${_realname}-v${pkgver}/LICENSE.md "${pkgdir}"${MINGW_PREFIX}/share/licenses/svt-av1/LICENSE
+  install -Dm644 "${srcdir}"/${_realname}-v${pkgver}/PATENTS.md "${pkgdir}"${MINGW_PREFIX}/share/licenses/svt-av1/PATENTS.md
 }

@@ -3,12 +3,12 @@
 _realname=pytest
 pkgbase=mingw-w64-python-${_realname}
 pkgname=("${MINGW_PACKAGE_PREFIX}-python-${_realname}")
-pkgver=8.3.2
+pkgver=8.3.4
 pkgrel=1
 pkgdesc='simple powerful testing with Python (mingw-w64)'
 license=('spdx:MIT')
 arch=('any')
-mingw_arch=('mingw32' 'mingw64' 'ucrt64' 'clang64' 'clang32' 'clangarm64')
+mingw_arch=('mingw32' 'mingw64' 'ucrt64' 'clang64' 'clangarm64')
 msys2_references=(
   'archlinux: python-pytest'
   'pypi: pytest'
@@ -23,8 +23,7 @@ depends=("${MINGW_PACKAGE_PREFIX}-python"
 makedepends=("${MINGW_PACKAGE_PREFIX}-python-build"
              "${MINGW_PACKAGE_PREFIX}-python-installer"
              "${MINGW_PACKAGE_PREFIX}-python-setuptools"
-             "${MINGW_PACKAGE_PREFIX}-python-setuptools-scm"
-             "${MINGW_PACKAGE_PREFIX}-python-wheel")
+             "${MINGW_PACKAGE_PREFIX}-python-setuptools-scm")
 checkdepends=("${MINGW_PACKAGE_PREFIX}-python-argcomplete"
               "${MINGW_PACKAGE_PREFIX}-python-attrs"
               "${MINGW_PACKAGE_PREFIX}-python-hypothesis"
@@ -34,7 +33,7 @@ checkdepends=("${MINGW_PACKAGE_PREFIX}-python-argcomplete"
               "${MINGW_PACKAGE_PREFIX}-python-requests")
 options=('!strip')
 source=("https://pypi.org/packages/source/${_realname::1}/${_realname}/${_realname}-${pkgver}.tar.gz")
-sha256sums=('c132345d12ce551242c87269de812483f5bcc87cdbb4722e48487ba194f9fdce')
+sha256sums=('965370d062bce11e73868e0335abac31b4d3de0e82f4007408d242b4f8610761')
 
 prepare() {
   sed -i 's/assert numentries == 0/assert numentries == 26/' ${_realname}-${pkgver}/testing/python/collect.py

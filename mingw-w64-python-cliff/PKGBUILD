@@ -3,14 +3,11 @@
 _realname=cliff
 pkgbase=mingw-w64-python-${_realname}
 pkgname=("${MINGW_PACKAGE_PREFIX}-python-${_realname}")
-provides=("${MINGW_PACKAGE_PREFIX}-python3-${_realname}")
-conflicts=("${MINGW_PACKAGE_PREFIX}-python3-${_realname}")
-replaces=("${MINGW_PACKAGE_PREFIX}-python3-${_realname}")
-pkgver=4.6.0
+pkgver=4.8.0
 pkgrel=1
 pkgdesc="Command Line Interface Formulation Framewor (mingw-w64)"
 arch=('any')
-mingw_arch=('mingw32' 'mingw64' 'ucrt64' 'clang64' 'clang32' 'clangarm64')
+mingw_arch=('mingw64' 'ucrt64' 'clang64' 'clangarm64')
 msys2_references=(
   'archlinux: python-cliff'
   'pypi: cliff'
@@ -28,34 +25,14 @@ depends=("${MINGW_PACKAGE_PREFIX}-python-autopage"
 makedepends=("${MINGW_PACKAGE_PREFIX}-python-build"
              "${MINGW_PACKAGE_PREFIX}-python-installer"
              "${MINGW_PACKAGE_PREFIX}-python-pbr"
-             "${MINGW_PACKAGE_PREFIX}-python-setuptools"
-             "${MINGW_PACKAGE_PREFIX}-python-wheel")
+             "${MINGW_PACKAGE_PREFIX}-python-setuptools")
 #checkdepends=("${MINGW_PACKAGE_PREFIX}-python-testrepository"
 #              "${MINGW_PACKAGE_PREFIX}-python-mock"
 #              "${MINGW_PACKAGE_PREFIX}-python-sphinx"
 #              "${MINGW_PACKAGE_PREFIX}-python-oslosphinx"
 #              "${MINGW_PACKAGE_PREFIX}-python-testscenarios")
 source=("https://pypi.org/packages/source/${_realname::1}/${_realname}/${_realname/-/_}-${pkgver}.tar.gz")
-sha256sums=('2f38ce8bd1ea4958d66f15b066ac47e65d61f600b9319b921e12e9e9cbcd99d0')
-
-# Helper macros to help make tasks easier #
-apply_patch_with_msg() {
-  for _patch in "$@"
-  do
-    msg2 "Applying $_patch"
-    patch -Nbp1 -i "${srcdir}/$_patch"
-  done
-}
-
-del_file_exists() {
-  for _fname in "$@"
-  do
-    if [ -f $_fname ]; then
-      rm -rf $_fname
-    fi
-  done
-}
-# =========================================== #
+sha256sums=('23eff502e603cf0aa841eaea6662a42cd3064169162b3e596b20226400e34dfd')
 
 prepare() {
   rm -rf python-build-${MSYSTEM} | true

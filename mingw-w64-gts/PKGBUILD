@@ -7,7 +7,7 @@ pkgver=0.7.6
 pkgrel=2
 pkgdesc="Provides useful functions to deal with 3D surfaces meshed with interconnected triangles (mingw-w64)"
 arch=('any')
-mingw_arch=('mingw32' 'mingw64' 'ucrt64' 'clang64' 'clang32' 'clangarm64')
+mingw_arch=('mingw32' 'mingw64' 'ucrt64' 'clang64' 'clangarm64')
 url="https://gts.sourceforge.io/"
 license=('LGPL')
 depends=("${MINGW_PACKAGE_PREFIX}-glib2")
@@ -24,9 +24,9 @@ prepare() {
 }
 
 build() {
-  [[ -d "${srcdir}"/build-${CARCH} ]] && rm -rf "${srcdir}"/build-${CARCH}
-  cp -rf "${srcdir}"/${_realname}-${pkgver}/. "${srcdir}"/build-${CARCH}
-  cd "${srcdir}"/build-${CARCH}
+  [[ -d "${srcdir}"/build-${MSYSTEM} ]] && rm -rf "${srcdir}"/build-${MSYSTEM}
+  cp -rf "${srcdir}"/${_realname}-${pkgver}/. "${srcdir}"/build-${MSYSTEM}
+  cd "${srcdir}"/build-${MSYSTEM}
   
   export LDFLAGS=${LDFLAGS//--as-needed,}
   ./configure \
@@ -41,11 +41,11 @@ build() {
 }
 
 package() {
-  cd "${srcdir}"/build-${CARCH}
+  cd "${srcdir}"/build-${MSYSTEM}
   make install DESTDIR="${pkgdir}"
   
   local PREFIX_WIN=$(cygpath -wm ${MINGW_PREFIX})
   sed -e "s|${PREFIX_WIN}|${MINGW_PREFIX}|g" -i "${pkgdir}${MINGW_PREFIX}/bin/gts-config"
   
-  install -Dm644 ${srcdir}/${_realname}-${pkgver}/COPYING ${pkgdir}${MINGW_PREFIX}/share/licenses/${_realname}/COPYING
+  install -Dm644 "${srcdir}"/${_realname}-${pkgver}/COPYING "${pkgdir}"${MINGW_PREFIX}/share/licenses/${_realname}/COPYING
 }

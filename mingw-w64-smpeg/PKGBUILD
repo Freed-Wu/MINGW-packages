@@ -7,7 +7,7 @@ pkgver=0.4.5
 pkgrel=5
 pkgdesc="SDL MPEG Player Library (mingw-w64)"
 arch=('any')
-mingw_arch=('mingw32' 'mingw64' 'ucrt64' 'clang64' 'clang32')
+mingw_arch=('mingw32' 'mingw64' 'ucrt64' 'clang64')
 url="https://icculus.org/smpeg/"
 license=("LGPL")
 makedepends=("${MINGW_PACKAGE_PREFIX}-cc"
@@ -17,7 +17,6 @@ makedepends=("${MINGW_PACKAGE_PREFIX}-cc"
 depends=("${MINGW_PACKAGE_PREFIX}-gcc-libs"
          "${MINGW_PACKAGE_PREFIX}-SDL")
 optdepends=("${MINGW_PACKAGE_PREFIX}-gtk2: for gtv")
-options=('staticlibs' 'strip')
 source=("${_realname}::svn://svn.icculus.org/smpeg/tags/release_${pkgver//./_}"
         no-undefined.patch
         clang-libtool-tweak.patch)
@@ -27,13 +26,12 @@ sha256sums=('SKIP'
 
 prepare() {
   cd "${srcdir}"/${_realname}
-  patch -p1 -i ${srcdir}/no-undefined.patch
-  patch -p1 -i ${srcdir}/clang-libtool-tweak.patch
+  patch -p1 -i "${srcdir}"/no-undefined.patch
+  patch -p1 -i "${srcdir}"/clang-libtool-tweak.patch
   ./autogen.sh
 }
 
 build() {
-  [[ -d ${srcdir}/build-${MSYSTEM} ]] && rm -rf ${srcdir}/build-${MSYSTEM}
   mkdir -p "${srcdir}/build-${MSYSTEM}" && cd "${srcdir}/build-${MSYSTEM}/"
 
   CFLAGS+=" -Wno-error=narrowing"
@@ -55,6 +53,6 @@ package() {
   make DESTDIR="${pkgdir}" install
 
   # hacky way of resolving conflicts
-  rm ${pkgdir}${MINGW_PREFIX}/bin/plaympeg
-  rm -r ${pkgdir}${MINGW_PREFIX}/share/man
+  rm "${pkgdir}"${MINGW_PREFIX}/bin/plaympeg
+  rm -r "${pkgdir}"${MINGW_PREFIX}/share/man
 }

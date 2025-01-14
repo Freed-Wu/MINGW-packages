@@ -7,10 +7,10 @@ provides=("${MINGW_PACKAGE_PREFIX}-libgnurx")
 conflicts=("${MINGW_PACKAGE_PREFIX}-libgnurx")
 replaces=("${MINGW_PACKAGE_PREFIX}-libgnurx")
 pkgver=1.0.1
-pkgrel=5
+pkgrel=6
 pkgdesc="Wrapper library around TRE that provides POSIX API (mingw-w64)"
 arch=('any')
-mingw_arch=('mingw32' 'mingw64' 'ucrt64' 'clang64' 'clang32' 'clangarm64')
+mingw_arch=('mingw32' 'mingw64' 'ucrt64' 'clang64' 'clangarm64')
 url=""
 license=('BSD')
 depends=("${MINGW_PACKAGE_PREFIX}-libtre")
@@ -25,8 +25,8 @@ prepare() {
 }
 
 build() {
-  [[ -d "${srcdir}/build-${MINGW_CHOST}" ]] && rm -rf "${srcdir}/build-${MINGW_CHOST}"
-  mkdir -p "${srcdir}/build-${MINGW_CHOST}" && cd "${srcdir}/build-${MINGW_CHOST}"
+  mkdir -p "${srcdir}/build-${MSYSTEM}" && cd "${srcdir}/build-${MSYSTEM}"
+
   ../systre-${pkgver}/configure\
     --prefix=${MINGW_PREFIX} \
     --build=${MINGW_CHOST} \
@@ -39,7 +39,7 @@ build() {
 }
 
 package() {
-  cd build-${MINGW_CHOST}
+  cd build-${MSYSTEM}
   make DESTDIR="${pkgdir}" install
   install -D -m644 "${srcdir}/systre-${pkgver}/COPYING" "${pkgdir}${MINGW_PREFIX}/share/licenses/${_realname}/LICENSE"
 }

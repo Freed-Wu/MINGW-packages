@@ -3,8 +3,8 @@
 _realname=pelican
 pkgbase=mingw-w64-${_realname}
 pkgname=("${MINGW_PACKAGE_PREFIX}-${_realname}")
-pkgver=4.9.1
-pkgrel=2
+pkgver=4.10.2
+pkgrel=1
 pkgdesc='Static site generator supporting Markdown and reStructuredText (mingw-w64)'
 arch=('any')
 mingw_arch=('mingw64' 'ucrt64' 'clang64')
@@ -37,7 +37,7 @@ checkdepends=("${MINGW_PACKAGE_PREFIX}-python-pytest"
 optdepends=("${MINGW_PACKAGE_PREFIX}-python-markdown: Markdown support")
 options=(!strip)
 source=("https://pypi.org/packages/source/${_realname::1}/${_realname}/${_realname}-${pkgver}.tar.gz")
-sha256sums=('c08434f0df2a6b649cfe485cbf0d8fdb727ff89ba6ecb1c867f88ceb2f37f179')
+sha256sums=('04932e82dc7542bae7f1830710978836ca00608aa4ece7206dc13185a08c4562')
 
 prepare() {
   cd "pelican-${pkgver}"

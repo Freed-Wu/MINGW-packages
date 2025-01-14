@@ -6,7 +6,7 @@ pkgname="${MINGW_PACKAGE_PREFIX}-${_realname}"
 pkgver=1.0.3
 pkgrel=7
 arch=('any')
-mingw_arch=('mingw32' 'mingw64' 'ucrt64' 'clang64' 'clang32' 'clangarm64')
+mingw_arch=('mingw32' 'mingw64' 'ucrt64' 'clang64' 'clangarm64')
 pkgdesc="liboauth is a collection of POSIX-c functions implementing the OAuth Core RFC 5849 standard (mingw-w64)"
 license=('spdx:GPL-2.0' 'spdx:MIT')
 url="https://liboauth.sourceforge.io/"
@@ -22,7 +22,7 @@ sha256sums=('bbe73b9f576fab0deefadb242c069f2f8bfa4068c738b7666ccd01381502c854'
 
 prepare() {
   cd ${_realname}-${pkgver}
-  patch -p1 -i ${srcdir}/noundefined.patch
+  patch -p1 -i "${srcdir}"/noundefined.patch
 
   autoreconf -fi
 }
@@ -44,8 +44,8 @@ build() {
 
 package() {
   cd build-${MSYSTEM}
-  make DESTDIR=${pkgdir} install
+  make DESTDIR="${pkgdir}" install
 
-  install -Dm644 ${srcdir}/${_realname}-${pkgver}/COPYING.GPL ${pkgdir}${MINGW_PREFIX}/share/licenses/${_realname}/LICENSE-GPL
-  install -Dm644 ${srcdir}/${_realname}-${pkgver}/COPYING.MIT ${pkgdir}${MINGW_PREFIX}/share/licenses/${_realname}/LICENSE-MIT
+  install -Dm644 "${srcdir}"/${_realname}-${pkgver}/COPYING.GPL "${pkgdir}"${MINGW_PREFIX}/share/licenses/${_realname}/LICENSE-GPL
+  install -Dm644 "${srcdir}"/${_realname}-${pkgver}/COPYING.MIT "${pkgdir}"${MINGW_PREFIX}/share/licenses/${_realname}/LICENSE-MIT
 }

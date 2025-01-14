@@ -8,7 +8,7 @@ pkgver=2.15.0
 pkgrel=2
 pkgdesc="A library for configuring and customizing font access (mingw-w64)"
 arch=('any')
-mingw_arch=('mingw32' 'mingw64' 'ucrt64' 'clang64' 'clang32' 'clangarm64')
+mingw_arch=('mingw32' 'mingw64' 'ucrt64' 'clang64' 'clangarm64')
 url="https://wiki.freedesktop.org/www/Software/fontconfig/"
 msys2_repository_url="https://gitlab.freedesktop.org/fontconfig/fontconfig"
 msys2_references=(
@@ -37,10 +37,10 @@ prepare() {
   cd "${_realname}-${pkgver}"
 
   # backport because it seems relevant for us
-  patch -p1 -i ${srcdir}/a76b95105ca26c600279b2daf4bd43b37a918823.patch
+  patch -p1 -i "${srcdir}"/a76b95105ca26c600279b2daf4bd43b37a918823.patch
 
-  patch -p1 -i ${srcdir}/0010-fix-relocation.patch
-  patch -p1 -i ${srcdir}/0011-conf-copy-instead-of-symlink.patch
+  patch -p1 -i "${srcdir}"/0010-fix-relocation.patch
+  patch -p1 -i "${srcdir}"/0011-conf-copy-instead-of-symlink.patch
 }
 
 build() {

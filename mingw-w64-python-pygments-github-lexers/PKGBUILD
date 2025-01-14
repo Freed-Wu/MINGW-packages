@@ -4,7 +4,7 @@ _realname=pygments-github-lexers
 pkgbase=mingw-w64-python-${_realname}
 pkgname=("${MINGW_PACKAGE_PREFIX}-python-${_realname}")
 pkgver=0.0.5
-pkgrel=3
+pkgrel=4
 pkgdesc="Pygments Github custom lexers. (mingw-w64)"
 arch=('any')
 mingw_arch=('mingw64' 'ucrt64' 'clang64' 'clangarm64')
@@ -43,5 +43,5 @@ package() {
     "${MINGW_PREFIX}"/bin/python setup.py install --prefix="${MINGW_PREFIX}" \
       --root="${pkgdir}" --optimize=1 --skip-build
 
-  install -Dm644 ${srcdir}/LICENSE "${pkgdir}${MINGW_PREFIX}/share/licenses/python-${_realname}/LICENSE"
+  install -Dm644 "${srcdir}"/LICENSE "${pkgdir}${MINGW_PREFIX}/share/licenses/python-${_realname}/LICENSE"
 }

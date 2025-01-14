@@ -3,15 +3,16 @@
 _realname=watchfiles
 pkgbase=mingw-w64-python-${_realname}
 pkgname=("${MINGW_PACKAGE_PREFIX}-python-${_realname}")
-pkgver=0.23.0
+pkgver=1.0.4
 pkgrel=1
 pkgdesc="Simple, modern and high performance file watching and code reload in python (mingw-w64)"
 arch=('any')
 mingw_arch=('mingw64' 'ucrt64' 'clang64')
-url='https://github.com/samuelcolvin/watchfiles'
 msys2_references=(
   'pypi: watchfiles'
 )
+msys2_repository_url='https://github.com/samuelcolvin/watchfiles'
+url='https://watchfiles.helpmanual.io/'
 license=('spdx:MIT')
 depends=(
   "${MINGW_PACKAGE_PREFIX}-python"
@@ -24,7 +25,7 @@ makedepends=(
 )
 options=('!strip')
 source=("https://pypi.org/packages/source/${_realname::1}/${_realname}/${_realname}-${pkgver}.tar.gz")
-sha256sums=('9338ade39ff24f8086bb005d16c29f8e9f19e55b18dcb04dfa26fcbc09da497b')
+sha256sums=('6ba473efd11062d73e4f00c2b730255f9c1bdd73cd5f9fe5b5da8dbd4a717205')
 
 prepare() {
   cd "${srcdir}/${_realname}-${pkgver}"
@@ -36,6 +37,7 @@ build() {
   cd "${srcdir}/${_realname}-${pkgver}"
 
   export WINAPI_NO_BUNDLED_LIBRARIES=1
+  export _PYTHON_HOST_PLATFORM=$(python -c "import sysconfig, sys; sys.stdout.write(sysconfig.get_platform())")
   "${MINGW_PREFIX}"/bin/maturin build --release --strip --locked --all-features
 }
 

@@ -7,7 +7,7 @@ pkgver=1.1.1
 pkgrel=1
 pkgdesc="Library for encoding and decoding .avif files (mingw-w64)"
 arch=('any')
-mingw_arch=('mingw32' 'mingw64' 'ucrt64' 'clang64' 'clang32' 'clangarm64')
+mingw_arch=('mingw32' 'mingw64' 'ucrt64' 'clang64' 'clangarm64')
 url="https://github.com/AOMediaCodec/libavif"
 license=('spdx:BSD-2-Clause')
 depends=("${MINGW_PACKAGE_PREFIX}-aom"
@@ -47,13 +47,11 @@ build() {
     -DBUILD_SHARED_LIBS=OFF \
     -DCMAKE_INSTALL_PREFIX=${MINGW_PREFIX} \
     "${extra_config[@]}" \
-    -DAVIF_BUILD_APPS=SYSTEM \
     -DAVIF_CODEC_AOM=SYSTEM \
     -DAVIF_CODEC_DAV1D=SYSTEM \
     -DAVIF_CODEC_RAV1E=SYSTEM \
     -DAVIF_CODEC_SVT=$( [[ ${CARCH} == i686 ]] &&
                         echo "OFF" || echo "SYSTEM" ) \
-    -DAVIF_BUILD_GDK_PIXBUF=ON \
     -DAVIF_LIBSHARPYUV=SYSTEM \
     -S "${_realname}-${pkgver}" \
     -B "build-${MSYSTEM}-static"
@@ -82,7 +80,7 @@ build() {
 }
 
 check() {
-  cd ${srcdir}/build-${MSYSTEM}-shared
+  cd "${srcdir}"/build-${MSYSTEM}-shared
   ${MINGW_PREFIX}/bin/cmake -DAVIF_BUILD_TESTS=ON ../${_realname}-${pkgver}
   ${MINGW_PREFIX}/bin/cmake --build .
   ${MINGW_PREFIX}/bin/ctest ./ || true
@@ -92,6 +90,6 @@ package() {
   DESTDIR="${pkgdir}" ${MINGW_PREFIX}/bin/cmake --install "build-${MSYSTEM}-static"
   DESTDIR="${pkgdir}" ${MINGW_PREFIX}/bin/cmake --install "build-${MSYSTEM}-shared"
 
-  install -Dm644 ${srcdir}/${_realname}-${pkgver}/README.md ${pkgdir}${MINGW_PREFIX}/share/doc/${_realname}/README.md
-  install -Dm644 ${srcdir}/${_realname}-${pkgver}/LICENSE ${pkgdir}${MINGW_PREFIX}/share/licenses/${_realname}/LICENSE
+  install -Dm644 "${srcdir}"/${_realname}-${pkgver}/README.md "${pkgdir}"${MINGW_PREFIX}/share/doc/${_realname}/README.md
+  install -Dm644 "${srcdir}"/${_realname}-${pkgver}/LICENSE "${pkgdir}"${MINGW_PREFIX}/share/licenses/${_realname}/LICENSE
 }

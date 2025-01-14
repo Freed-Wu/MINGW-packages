@@ -7,7 +7,7 @@ pkgver=5.7.0
 pkgrel=1
 pkgdesc="Audio compression format with lossless, lossy and hybrid compression modes (mingw-w64)"
 arch=('any')
-mingw_arch=('mingw32' 'mingw64' 'ucrt64' 'clang64' 'clang32' 'clangarm64')
+mingw_arch=('mingw32' 'mingw64' 'ucrt64' 'clang64' 'clangarm64')
 msys2_repository_url='https://github.com/dbry/WavPack/'
 url="https://www.wavpack.com/"
 msys2_references=(
@@ -24,7 +24,7 @@ source=("https://github.com/dbry/WavPack/releases/download/${pkgver}/wavpack-${p
 sha256sums=('e81510fd9ec5f309f58d5de83e9af6c95e267a13753d7e0bbfe7b91273a88bee')
 
 prepare() {
-  cd ${srcdir}/${_realname}-${pkgver}
+  cd "${srcdir}"/${_realname}-${pkgver}
 }
 
 build() {

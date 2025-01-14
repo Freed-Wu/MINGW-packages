@@ -4,11 +4,11 @@
 _realname=libjxl
 pkgbase=mingw-w64-${_realname}
 pkgname="${MINGW_PACKAGE_PREFIX}-${_realname}"
-pkgver=0.10.3
+pkgver=0.11.1
 pkgrel=1
 pkgdesc='JPEG XL image format reference implementation (mingw-w64)'
 arch=('any')
-mingw_arch=('mingw32' 'mingw64' 'ucrt64' 'clang64' 'clang32' 'clangarm64')
+mingw_arch=('mingw32' 'mingw64' 'ucrt64' 'clang64' 'clangarm64')
 msys2_repository_url='https://github.com/libjxl/libjxl'
 msys2_references=(
   "cpe: cpe:/a:jpeg:jpeg-xl"
@@ -32,7 +32,7 @@ makedepends=("${MINGW_PACKAGE_PREFIX}-cc"
              "${MINGW_PACKAGE_PREFIX}-gdk-pixbuf2")
 optdepends=("${MINGW_PACKAGE_PREFIX}-gdk-pixbuf2: for gdk-pixbuf loader")
 source=("${_realname}-${pkgver}.tar.gz::https://github.com/libjxl/libjxl/archive/v${pkgver}.tar.gz")
-sha256sums=('e0191411cfcd927eebe5392d030fe4283fe27ba1685ab7265104936e0b4283a6')
+sha256sums=('1492dfef8dd6c3036446ac3b340005d92ab92f7d48ee3271b5dac1d36945d3d9')
 noextract=("${_realname}-${pkgver}.tar.gz")
 
 prepare() {

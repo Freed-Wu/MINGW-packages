@@ -3,7 +3,7 @@
 _realname=poetry
 pkgbase=mingw-w64-python-${_realname}
 pkgname=("${MINGW_PACKAGE_PREFIX}-python-${_realname}")
-pkgver=1.8.3
+pkgver=2.0.1
 pkgrel=1
 pkgdesc="Python dependency management and packaging made easy (mingw-w64)"
 arch=('any')
@@ -41,7 +41,7 @@ depends=(
 )
 options=('!strip')
 source=("https://pypi.org/packages/source/${_realname::1}/${_realname}/${_realname}-${pkgver}.tar.gz")
-sha256sums=('67f4eb68288eab41e841cc71a00d26cf6bdda9533022d0189a145a34d0a35f48')
+sha256sums=('a2987c3162f6ded6db890701a6fc657d2cfcc702e9421ef4c345211c8bffc5d5')
 
 prepare() {
   cd "${_realname}-${pkgver}"

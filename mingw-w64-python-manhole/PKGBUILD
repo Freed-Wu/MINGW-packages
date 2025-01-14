@@ -3,11 +3,11 @@
 _realname=manhole
 pkgbase=mingw-w64-python-${_realname}
 pkgname=("${MINGW_PACKAGE_PREFIX}-python-${_realname}")
-pkgver=1.8.0
-pkgrel=3
+pkgver=1.8.1
+pkgrel=1
 pkgdesc="Debugging manhole for python applications (mingw-w64)"
 arch=('any')
-mingw_arch=('mingw32' 'mingw64' 'ucrt64' 'clang64' 'clang32' 'clangarm64')
+mingw_arch=('mingw32' 'mingw64' 'ucrt64' 'clang64' 'clangarm64')
 url='https://github.com/ionelmc/python-manhole'
 msys2_references=(
   'pypi: manhole'
@@ -15,28 +15,27 @@ msys2_references=(
 license=('BSD')
 depends=("${MINGW_PACKAGE_PREFIX}-python")
 makedepends=("${MINGW_PACKAGE_PREFIX}-python-setuptools")
-checkdepends=("${MINGW_PACKAGE_PREFIX}-python-pytest-runner"
+checkdepends=("${MINGW_PACKAGE_PREFIX}-python-pytest"
               "${MINGW_PACKAGE_PREFIX}-python-requests"
               #"${MINGW_PACKAGE_PREFIX}-python-process-tests"
               #"${MINGW_PACKAGE_PREFIX}-python-virtualenv"
              )
-options=('staticlibs' 'strip' '!debug')
 source=("${_realname}-${pkgver}.tar.gz::https://github.com/ionelmc/python-manhole/archive/v$pkgver.tar.gz")
-sha512sums=('041452d602895f7ceaafc74ac50713acd470120b022a942946de83f90d2d839ee15b333dfc329f88597b13e0b3fee436af526beae95a3ff94e51376fd2cc27e6')
+sha512sums=('f37d4f401e862fe49b6c59025f62fac15a2f1c0ece4c8418c27ce1cef62723aa47506210ef78ddc7c3219ab2f31019d5b1235e496861b9f7b094a3390a3128bb')
 
 prepare() {
-  rm -rf python-build-${CARCH} || true
-  cp -r "python-${_realname}-${pkgver}" "python-build-${CARCH}"
+  rm -rf python-build-${MSYSTEM} || true
+  cp -r "python-${_realname}-${pkgver}" "python-build-${MSYSTEM}"
 }
 
 build() {
-  msg "Python build for ${CARCH}"
-  cd "${srcdir}/python-build-${CARCH}"
+  msg "Python build for ${MSYSTEM}"
+  cd "${srcdir}/python-build-${MSYSTEM}"
   ${MINGW_PREFIX}/bin/python setup.py build
 }
 
 package() {
-  cd "${srcdir}/python-build-${CARCH}"
+  cd "${srcdir}/python-build-${MSYSTEM}"
   MSYS2_ARG_CONV_EXCL="--prefix=;--install-scripts=;--install-platlib=" \
   ${MINGW_PREFIX}/bin/python setup.py install --prefix=${MINGW_PREFIX} \
     --root="${pkgdir}" --optimize=1 --skip-build

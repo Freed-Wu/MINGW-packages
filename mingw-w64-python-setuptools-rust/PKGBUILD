@@ -3,8 +3,8 @@
 _realname=setuptools-rust
 pkgbase=mingw-w64-python-${_realname}
 pkgname=("${MINGW_PACKAGE_PREFIX}-python-${_realname}")
-pkgver=1.10.1
-pkgrel=1
+pkgver=1.10.2
+pkgrel=2
 pkgdesc="Compile and distribute Python extensions written in rust as easily as if they were written in C (mingw-w64)"
 url='https://github.com/PyO3/setuptools-rust'
 msys2_references=(
@@ -13,16 +13,15 @@ msys2_references=(
 )
 license=('spdx:MIT')
 arch=('any')
-mingw_arch=('mingw32' 'mingw64' 'ucrt64' 'clang64' 'clang32' 'clangarm64')
+mingw_arch=('mingw32' 'mingw64' 'ucrt64' 'clang64' 'clangarm64')
 depends=("${MINGW_PACKAGE_PREFIX}-rust"
          "${MINGW_PACKAGE_PREFIX}-python-semantic-version"
          "${MINGW_PACKAGE_PREFIX}-python-setuptools")
 makedepends=("${MINGW_PACKAGE_PREFIX}-python-build"
              "${MINGW_PACKAGE_PREFIX}-python-installer"
-             "${MINGW_PACKAGE_PREFIX}-python-setuptools-scm"
-             "${MINGW_PACKAGE_PREFIX}-python-wheel")
+             "${MINGW_PACKAGE_PREFIX}-python-setuptools-scm")
 source=("https://pypi.org/packages/source/${_realname::1}/${_realname/-/_}/${_realname/-/_}-${pkgver}.tar.gz")
-sha256sums=('d79035fc54cdf9342e9edf4b009491ecab06c3a652b37c3c137c7ba85547d3e6')
+sha256sums=('5d73e7eee5f87a6417285b617c97088a7c20d1a70fcea60e3bdc94ff567c29dc')
 
 prepare() {
   cp -r "${_realname/-/_}-${pkgver}" "python-build-${MSYSTEM}"

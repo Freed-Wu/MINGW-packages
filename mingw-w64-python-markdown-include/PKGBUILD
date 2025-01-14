@@ -5,12 +5,12 @@ _realname=${_pyname}
 pkgbase=mingw-w64-python-${_realname}
 pkgname=("${MINGW_PACKAGE_PREFIX}-python-${_realname}")
 pkgver=0.8.1
-pkgrel=3
+pkgrel=4
 pkgdesc="Provides syntax for Python-Markdown which allows for the inclusion of the contents of other Markdown documents (mingw-w64)"
 url="https://github.com/cmacmackin/markdown-include"
 license=('spdx:GPL-3.0-or-later')
 arch=('any')
-mingw_arch=('mingw32' 'mingw64' 'ucrt64' 'clang64' 'clang32' 'clangarm64')
+mingw_arch=('mingw32' 'mingw64' 'ucrt64' 'clang64' 'clangarm64')
 msys2_references=(
   'pypi: markdown-include'
 )
@@ -22,7 +22,7 @@ source=("https://pypi.io/packages/source/${_pyname:0:1}/${_pyname}/${_pyname}-${
 sha256sums=('1d0623e0fc2757c38d35df53752768356162284259d259c486b4ab6285cdbbe3')
 
 prepare() {
-  cd ${srcdir}
+  cd "${srcdir}"
   rm -rf python-build-${MSYSTEM} | true
   cp -r "${_pyname}-${pkgver}" "python-build-${MSYSTEM}"
 }
